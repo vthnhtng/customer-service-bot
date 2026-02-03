@@ -1,4 +1,5 @@
-import { setup, close } from "./browser/setup.js";
+import { setup } from "./browser/init.js";
+import { waitForManualLogin } from "./browser/manual-login.js";
 import CommandParser from "./cli/command-parser.js";
 
 const main = async () => {
@@ -9,11 +10,13 @@ const main = async () => {
 
 		await page.goto(url);
 
-		setTimeout(async () => {
-			await close(browser);
-		}, 5000);
+		await waitForManualLogin(page);
+
+		// TODO: Continue with your logic after login...
+
+		await browser.close();
 	} catch (error) {
-		console.error("An error occurred while running the application, automatically stop process...");
+		console.error("An error occurred while running the application: " + error);
 		process.exit(1);
 	}
 };
